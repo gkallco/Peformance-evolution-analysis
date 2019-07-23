@@ -1,0 +1,32 @@
+#!/bin/bash
+function costs_of_each_commit(){
+    counter=0
+    cd $1
+    for commit in $(git rev-list master)
+    do
+        counter=$((counter+1))
+        echo $counter 
+        git checkout -f $commit
+        infer run --cost-only -- mvn clean package -DskipTests
+    
+        cd infer-out
+        
+        cp costs-report.json $2
+        
+        cd $2
+        mv costs-report.json $counter-$commit.json
+
+        cd /Users/glediskallco/Downloads/UROP/performance-evolution-analysis/repositories/commons-logging
+        if [$counter -gt $3]
+        then 
+            break
+        fi
+
+    done
+}
+
+read -p 'Enter where is your project: ' location
+read -p 'Enter where do you want to save the information: ' reports
+read -p 'Enter how many commits you want to consider: ' commits
+costs_of_each_commit $location $reports $commits
+
