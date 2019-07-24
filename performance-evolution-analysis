@@ -13,11 +13,10 @@ function costs_of_each_commit(){
         
         cp costs-report.json $2
         
-        cd $2
-        mv costs-report.json $counter-$commit.json
+        mv $2/costs-report.json $counter-$commit.json
 
-        cd /Users/glediskallco/Downloads/UROP/performance-evolution-analysis/repositories/commons-logging
-        if [$counter -gt $3]
+        cd $1
+        if [$counter -gt $3];
         then 
             break
         fi
