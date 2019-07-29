@@ -1,31 +1,41 @@
 #!/bin/bash
-function costs_of_each_commit(){
+
+# $1--> location of all projects
+# $2--> where to save all cost-reports
+# $3--> how many commits to check for each file
+
+cd $1 
+
+for project in $( find . -maxdepth 1 -mindepth 1 -type d )
+do
+    cd $2
+    mkdir $project-costs
+
     counter=0
-    cd $1
+    cd $1/$project
+
     for commit in $(git rev-list master)
     do
         counter=$((counter+1))
         echo $counter 
+
         git checkout -f $commit
         infer run --cost-only -- mvn clean package -DskipTests
-    
-        cd infer-out
-        
-        cp costs-report.json $2
-        
-        mv $2/costs-report.json $counter-$commit.json
 
-        cd $1
-        if [$counter -gt $3];
+        cd infer-out
+        cp costs-report.json $2/$project-costs
+        mv $2/$project-costs/costs-report.json $counter-$commit.json
+
+        if ["$counter" -gt "$3"];
         then 
             break
         fi
 
+        cd $1/$project
     done
-}
+done
 
-read -p 'Enter where is your project: ' location
-read -p 'Enter where do you want to save the information: ' reports
-read -p 'Enter how many commits you want to consider: ' commits
-costs_of_each_commit $location $reports $commits
-
+# read -p 'Enter where are your projects: ' location
+# read -p 'Enter where do you want to save the information: ' reports
+# read -p 'Enter how many commits you want to consider: ' commits
+# costs_of_each_commit $location $reports $commits
