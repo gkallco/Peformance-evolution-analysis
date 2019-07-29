@@ -16,6 +16,7 @@ do
 
     for commit in $(git rev-list master)
     do
+        cd $1/$project
         counter=$((counter+1))
         echo $counter 
 
@@ -24,14 +25,12 @@ do
 
         cd infer-out
         cp costs-report.json $2/$project-costs
-        mv $2/$project-costs/costs-report.json $counter-$commit.json
+        mv $2/$project-costs/costs-report.json $2/$project-costs/$counter-$commit.json
 
-        if ["$counter" -gt "$3"]
+        if [ $counter -gt $3 ]
         then 
             break
         fi
-
-        cd $1/$project
     done
 done
 
