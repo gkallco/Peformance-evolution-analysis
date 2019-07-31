@@ -31,6 +31,18 @@ do
         then 
             break
         fi
+
+        flag=true
+        if [ $counter -gt 5 ] && [ flag = true]
+        then
+            flag=false
+
+            if ! [ $(ls -A $2/$project-costs) ]
+            then
+                break
+            fi
+
+        fi
     done
 done
 
