@@ -16,7 +16,7 @@ do
     cd $1/$project
 
     flag=true
-    
+
     for commit in $(git rev-list master)
     do
         cd $1/$project
@@ -40,10 +40,12 @@ do
 
             if ! [ $(ls -A $2/$project-costs) ];then
                 echo $project---maven-does-not-compile >> $1/failed_projects.txt
+                rm -rf $2/$project-costs
                 break
 
             elif ! [ -s $2/$project-costs/$counter-$commit.json];then
                 echo $project---cost-report-empty >> $1/failed_projects.txt
+                rm -rf $2/$project-costs
                 break
             fi
         fi
