@@ -40,10 +40,11 @@ do
             if ! [ $(ls -A $2/$project-costs) ];then
                 echo $project---maven-does-not-compile >> $1/failed_projects.txt
                 break
-                
+
             elif ! [ -s $2/$project-costs/$counter-$commit.json];then
                 echo $project---cost-report-empty >> $1/failed_projects.txt
                 break
+            fi
         fi
     done
 done
