@@ -37,14 +37,16 @@ do
 
         if [ $counter -gt 5 ] && [ $flag = true ];then
             flag=false
-
+            echo $flag
             if ! [ $(ls -A $2/$project-costs) ];then
                 echo $project---maven-does-not-compile >> $1/failed_projects.txt
+                echo $2/$project-costs
                 rm -rf $2/$project-costs
                 break
 
             elif ! [ -s $2/$project-costs/$counter-$commit.json];then
                 echo $project---cost-report-empty >> $1/failed_projects.txt
+                echo $2/$project-costs
                 rm -rf $2/$project-costs
                 break
             fi
