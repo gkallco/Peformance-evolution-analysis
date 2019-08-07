@@ -11,6 +11,7 @@ for project in $( find . -maxdepth 1 -mindepth 1 -type d )
 do
     cd $2
     mkdir $project-costs
+    mkdir $2/$project-outputs
 
     counter=0
     cd $1/$project
@@ -24,11 +25,13 @@ do
         echo $counter 
 
         git checkout -f $commit
-        infer run --cost-only -- mvn clean package -DskipTests
+        infer run --cost-only -- mvn clean package -DskipTests &> $2/$project-outputs/$counter-$commit.txt
 
         cd infer-out
         cp costs-report.json $2/$project-costs
-        mv $2/$project-costs/costs-report.json $2/$project-costs/$counter-$commit.json
+
+        counter_in_filename=`printf %06d $counter`
+        mv $2/$project-costs/costs-report.json $2/$project-costs/$counter_in_filename-$commit.json
 
         if [ $counter -gt $3 ]
         then 
